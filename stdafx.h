@@ -42,7 +42,6 @@
 
 #include "AlignNewDelete.h"
 #include "Utility.h"
-#include "EZHeapAlloc.h"
 
 #define XML_STATIC 1
 #include <expat.h>

@@ -237,9 +237,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Program Files\IDA 7.0\idasdk\idasupportlib\IDA_WaitEx\WaitBoxEx.h" />
     <ClInclude Include="AlignNewDelete.h" />
-    <ClInclude Include="EZHeapAlloc.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
