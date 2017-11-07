@@ -10,7 +10,7 @@
 #include <WaitBoxEx.h>
 
 // Signature container
-typedef struct __declspec(align(16)) _SIG {
+typedef struct ALIGN( 16 ) _SIG {
     LPSTR title;        // 0x00
     PBYTE data;         // 0x08
     UINT size;          // 0x10
@@ -20,8 +20,7 @@ typedef struct __declspec(align(16)) _SIG {
 typedef qvector<SIG> SIGLIST;
 
 // Match container
-typedef struct __declspec(align(16)) _MATCH
-{
+typedef struct ALIGN( 16 ) _MATCH {
     ea_t address;
     size_t index;
     bool operator()( _MATCH const &a, _MATCH const &b ) { return(a.address < b.address); }
@@ -83,29 +82,22 @@ extern "C" ALIGN( 16 ) plugin_t PLUGIN =
     NULL
 };
 
-ALIGN( 16 ) static const char mainForm[] =
-{
-    "BUTTON YES* Continue\n" // 'Continue' instead of 'okay'
-
+ALIGN( 16 ) static const char mainForm[] = {
+    // 'Continue' instead of 'okay'
+    "BUTTON YES* Continue\n" 
     // Title
     "IDA Signsrch\n"
-
     // Message text
     "IDA Signsrch\n"
     "Version: %A,   build: %A,   by Sirmabus\n\n"
-
     // checkbox -> bAltEndianSearch
     "<#Do alternate endian search in addition to the IDB's native endian.\nSearching will take about twice as long but can find additional matches in some cases. #Alternate endian search.:C>\n"
-
     // checkbox -> bDebugOutput
     "<#Output matches to the debugging channel so they can be viewed \nand logged by Sysinternals \"DebugView\", etc.#Output to debug channel.:C>\n"
-
     // checkbox -> bIncludeCodeSegments
     "<#Search code segments in addition to data segments. #Include code segments.:C>\n"
-
     // checkbox -> bPlaceComments
     "<#Automatically place label comments for located signatures.#Place signature comments.:C>>\n"
-
     // * Maintain button names hard coded in "HelpURL.h"
     "<#Click to open plugin support page.#Macromonkey forum:k:2:16::>   "
     "<#Click to open Luigi Auriemma's Signsrch page.#Luigi Signsrch page:k:2:16::>\n \n "
