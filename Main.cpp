@@ -104,8 +104,7 @@ ALIGN( 16 ) static const char mainForm[] = {
 };
 
 // Custom chooser icon
-static const BYTE iconData[] =
-{
+static const BYTE iconData[] = {
     0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00,
     0x0D, 0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
     0x00, 0x10, 0x08, 0x06, 0x00, 0x00, 0x00, 0x1F, 0xF3, 0xFF, 0x61,
@@ -122,8 +121,7 @@ static const BYTE iconData[] =
 
 // ============================================================================
 // Matches list window stuff
-static const LPCSTR columnHeader[] =
-{
+static const LPCSTR columnHeader[] = {
     "Address",
     "Size",
     "Label",
@@ -206,7 +204,7 @@ public:
     }
 };
 
-struct window_match_list *matchListChooser = NULL;
+static struct window_match_list *matchListChooser;
 
 // ======================================================================================
 static int idaapi pluginInit( )
@@ -218,7 +216,7 @@ static int idaapi pluginInit( )
     if (iconID == -1)
         iconID = load_custom_icon( iconData, sizeof( iconData ), "png" );
 
-    // Create list view window
+    // Create list view window - DO NOT FREE THIS ALLOCATION IN pluginTerm!!!
     matchListChooser = new window_match_list;
     listWindowUp = FALSE;
 
@@ -228,11 +226,15 @@ static int idaapi pluginInit( )
 // ======================================================================================
 static void idaapi pluginTerm( )
 {
-    if (matchListChooser)
-    {
-        delete matchListChooser;
-        matchListChooser = NULL;
-    }
+    //
+    // The chooser API is poorly designed. chooser_base_t::call_destructor is called by IDA when the 
+    // instance is closed, so if we try to free our allocated struct here, we cause a heap corruption.
+    //
+    //if (matchListChooser)
+    //{
+    //    delete matchListChooser;
+    //    matchListChooser = NULL;
+    //}
 
     if (iconID != -1)
     {
@@ -581,8 +583,8 @@ static void clearMatchData( )
 static UINT processSegment( segment_t *segPtr )
 {
     UINT matches = 0;
-
-    if (UINT size = (UINT)segPtr->size( ))
+    UINT size = (UINT)segPtr->size( );
+    if (size)
     {
         if (!pageBuffer)
         {
@@ -714,7 +716,7 @@ static UINT processSegment( segment_t *segPtr )
         }
     }
 
-    return(matches);
+    return matches;
 }
 
 static bool idaapi pluginRun( size_t arg )

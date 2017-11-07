@@ -7,9 +7,8 @@
 #pragma once
 
 // Size of string with out terminator
-#define SIZESTR(x) (sizeof(x) - 1)
-
-#define ALIGN(_x_) __declspec(align(_x_))
+#define SIZESTR(x)  (sizeof(x) - 1)
+#define ALIGN(x)    __declspec(align(x))
 
 // Stack alignment trick, based on Douglas Walker's post
 // http://www.gamasutra.com/view/feature/3975/data_alignment_part_2_objects_on_.php
@@ -54,20 +53,19 @@ LPSTR  prettyNumberString( UINT64 n, __bcount( 32 ) LPSTR buffer );
 #endif
 
 // Sequential 32 bit flag serializer
-struct SBITFLAG
-{
-    inline SBITFLAG( ) : Index( 0 ) {}
+struct SBITFLAG {
+    inline SBITFLAG( ) : Index( 0 ) { }
     inline UINT First( ) { Index = 0; return(1 << Index++); }
-    inline UINT Next( ) { return(1 << Index++); }
+    inline UINT Next( ) { return (1 << Index++); }
     UINT Index;
 };
 
 
 // Private heap for easy management with align 16 and better cache cohesion, etc.
-class EZHeap : public AlignNewDelete
-{
+class EZHeap : public AlignNewDelete {
 public:
-    EZHeap( ) : m_hHeap( NULL )
+    EZHeap( ) 
+        : m_hHeap( NULL )
     {
         if (m_hHeap = ::HeapCreate( HEAP_CREATE_ALIGN_16, 0, 0 ))
         {
